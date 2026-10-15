@@ -1,0 +1,16 @@
+{
+  "artifactStatus": "PREPARED_DISABLED",
+  "capability": "H",
+  "name": "DN - Stalled decision reminder",
+  "enabled": false,
+  "reasonDisabled": "Requires approved reminder policy, Teams/Outlook connection, service identity, throttling, owner opt-out, and retention review.",
+  "proposedTrigger": "Daily recurrence at 08:00 Europe/Berlin",
+  "proposedGuardrails": [
+    "No reminders for Closed or Class C records",
+    "Maximum one reminder per decision per seven days",
+    "Only named owner and action owner recipients",
+    "No evidence excerpts or restricted payload data in notifications",
+    "Every notification appended to DN_Audit",
+    "Human owner can mute without changing decision state"
+  ]
+}

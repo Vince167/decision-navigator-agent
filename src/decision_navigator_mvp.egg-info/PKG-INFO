@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: decision-navigator-mvp
+Version: 0.1.0
+Summary: Bounded decision-preparation agent with deterministic workflows
+Requires-Python: >=3.11
+Requires-Dist: fastapi<1,>=0.110
+Requires-Dist: pydantic<3,>=2.6
+Requires-Dist: uvicorn<1,>=0.27
+Provides-Extra: test
+Requires-Dist: pytest<10,>=8; extra == "test"
+Requires-Dist: httpx<1,>=0.27; extra == "test"

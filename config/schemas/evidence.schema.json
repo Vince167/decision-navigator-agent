@@ -1,0 +1,123 @@
+{
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "decision_id": {
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "option_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Option Ids",
+      "type": "array"
+    },
+    "claim": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Claim",
+      "type": "string"
+    },
+    "source_title": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Source Title",
+      "type": "string"
+    },
+    "source_url": {
+      "format": "uri",
+      "maxLength": 2083,
+      "minLength": 1,
+      "title": "Source Url",
+      "type": "string"
+    },
+    "source_locator": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Source Locator",
+      "type": "string"
+    },
+    "excerpt": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "title": "Excerpt",
+      "type": "string"
+    },
+    "captured_by": {
+      "title": "Captured By",
+      "type": "string"
+    },
+    "captured_at": {
+      "format": "date-time",
+      "title": "Captured At",
+      "type": "string"
+    },
+    "status": {
+      "default": "unverified",
+      "enum": [
+        "unverified",
+        "verified",
+        "conflicting",
+        "superseded"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "verified_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Verified By"
+    },
+    "verified_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Verified At"
+    },
+    "supersedes_evidence_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Supersedes Evidence Id"
+    },
+    "content_hash": {
+      "title": "Content Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision_id",
+    "claim",
+    "source_title",
+    "source_url",
+    "source_locator",
+    "excerpt",
+    "captured_by",
+    "content_hash"
+  ],
+  "title": "EvidenceRecord",
+  "type": "object"
+}

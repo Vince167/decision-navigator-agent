@@ -1,0 +1,108 @@
+{
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "decision_id": {
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "target_type": {
+      "enum": [
+        "decision",
+        "action"
+      ],
+      "title": "Target Type",
+      "type": "string"
+    },
+    "target_id": {
+      "title": "Target Id",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    },
+    "payload_hash": {
+      "title": "Payload Hash",
+      "type": "string"
+    },
+    "status": {
+      "default": "Pending",
+      "enum": [
+        "Pending",
+        "Approved",
+        "Rejected",
+        "Expired",
+        "Revoked"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "requested_by": {
+      "title": "Requested By",
+      "type": "string"
+    },
+    "required_approver_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Required Approver Ids",
+      "type": "array"
+    },
+    "acted_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Acted By"
+    },
+    "acted_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Acted At"
+    },
+    "comment": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Comment"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision_id",
+    "target_type",
+    "target_id",
+    "payload",
+    "payload_hash",
+    "requested_by"
+  ],
+  "title": "ApprovalRecord",
+  "type": "object"
+}

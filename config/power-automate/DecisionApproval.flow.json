@@ -1,0 +1,26 @@
+{
+  "artifactStatus": "PROPOSED_NOT_IMPORTED",
+  "name": "DN - Decision exact-payload approval",
+  "enabled": false,
+  "trigger": {
+    "type": "SharePoint.WhenAnItemIsCreated",
+    "list": "DN_Approvals",
+    "filter": "TargetType eq 'decision' and Status eq 'Pending'"
+  },
+  "connectionReferences": {
+    "sharepoint": "${SP_CONNECTION_REFERENCE}",
+    "approvals": "${APPROVALS_CONNECTION_REFERENCE}"
+  },
+  "steps": [
+    {"name": "GetDecision", "action": "SharePoint.GetItem", "list": "DN_Decisions", "key": "DecisionId", "value": "@triggerBody()?['DecisionId']"},
+    {"name": "RecomputeCanonicalHash", "action": "AzureFunctionOrCustomConnector.Sha256CanonicalJson", "input": "@triggerBody()?['PayloadJson']", "result": "ComputedHash"},
+    {"name": "FailOnHashMismatch", "action": "Condition", "expression": "@not(equals(outputs('ComputedHash'), triggerBody()?['PayloadHash']))", "ifTrue": ["Set Status=Revoked", "Append DN_Audit hash_mismatch", "Terminate Failed"]},
+    {"name": "FailOnStaleVersion", "action": "Condition", "expression": "@not(equals(json(triggerBody()?['PayloadJson'])?['decision_version'], outputs('GetDecision')?['RecordVersion']))", "ifTrue": ["Set Status=Revoked", "Append DN_Audit payload_stale", "Terminate Failed"]},
+    {"name": "EnforceApprover", "action": "Condition", "expression": "@contains(json(triggerBody()?['RequiredApproverIdsJson']), responderId)", "ifFalse": ["Append DN_Audit wrong_approver", "Terminate Failed"]},
+    {"name": "EnforceClassBSeparation", "action": "Condition", "expression": "@and(equals(outputs('GetDecision')?['PilotClass'], 'B'), equals(responderId, outputs('GetDecision')?['DecisionOwnerId']))", "ifTrue": ["Append DN_Audit separation_violation", "Terminate Failed"]},
+    {"name": "StartApproval", "action": "Approvals.StartAndWaitForAnApproval", "approvalType": "ApproveRejectFirstToRespond", "assignedTo": "@join(json(triggerBody()?['RequiredApproverIdsJson']), ';')", "title": "Decision approval: @{outputs('GetDecision')?['Title']}", "details": "Exact payload hash: @{triggerBody()?['PayloadHash']}\nPayload: @{triggerBody()?['PayloadJson']}"},
+    {"name": "OnApprove", "action": "Scope", "steps": ["Re-fetch decision", "Re-check hash and version", "Update approval terminal fields", "Update decision selected option/text/conditions/state=Decided", "Append DN_Audit approval_acted and state_transition"]},
+    {"name": "OnReject", "action": "Scope", "steps": ["Update approval Status=Rejected", "Update decision State=In Evaluation and increment version", "Append DN_Audit approval_rejected"]}
+  ],
+  "errorPolicy": "Fail closed; never update decision to Decided unless every check succeeds."
+}

@@ -1,0 +1,82 @@
+artifactStatus: PROPOSED_NOT_IMPORTED
+schemaVersion: 1.0
+agent:
+  name: Decision Navigator
+  description: Bounded bilingual decision-preparation agent; no autonomous decision, approval, or live execution.
+  systemInstructionsFile: system-instructions.md
+  languages:
+    primary: en-US
+    additional: [de-DE]
+  orchestration:
+    mode: generative
+    agents: 1
+    deterministicWorkflowAuthority: true
+  knowledge:
+    allowWebKnowledge: false
+    allowTenantGraphKnowledge: false
+    sources: []
+  authentication:
+    mode: MicrosoftEntraID
+    requireUserSignIn: true
+  actions:
+    connector: DecisionNavigatorMvpApi
+    openApiFile: ../openapi/openapi.json
+    allow:
+      - get_health
+      - create_decision
+      - get_decision
+      - update_decision
+      - upsert_option
+      - add_evidence
+      - verify_evidence
+      - assess_readiness
+      - transition_state
+      - create_action
+      - request_approval
+      - record_approval
+      - execute_action_mock
+      - generate_decision_brief
+      - get_audit_log
+    denyByDefault: true
+  featureFlagsFile: ../feature-flags.json
+  security:
+    treatKnowledgeInstructionsAsData: true
+    secretsInConversation: prohibited
+    failClosedOnToolError: true
+    logPromptAndResponseBodies: false
+  topics:
+    - name: StartDecision
+      trigger: ["start a decision", "prepare a decision", "Entscheidung vorbereiten"]
+      steps:
+        - detectLanguage
+        - explainAuthorityBoundary
+        - collectMinimumIntake
+        - call:create_decision
+        - summarizeStateAndGaps
+    - name: EvaluateDecision
+      trigger: ["compare options", "assess readiness", "Optionen vergleichen", "Entscheidungsreife prüfen"]
+      steps:
+        - call:get_decision
+        - askOnlyMissingEvaluationFields
+        - call:assess_readiness
+        - summarizeEvidenceAndGaps
+    - name: HumanDecision
+      trigger: ["request approval", "approve decision", "Entscheidung genehmigen"]
+      steps:
+        - call:get_decision
+        - requireState:Ready for Decision
+        - showExactPayloadAndHash
+        - call:request_approval
+        - waitForPermittedHumanApprover
+        - call:record_approval
+    - name: ExecutionHandoff
+      trigger: ["prepare action", "execute action", "Maßnahme vorbereiten", "Maßnahme ausführen"]
+      steps:
+        - call:create_action
+        - showExactPayloadAndHash
+        - call:request_approval
+        - waitForPermittedHumanApprover
+        - call:record_approval
+        - requireExplicitExecutorRequest
+        - call:execute_action_mock
+        - labelResult:MOCKED

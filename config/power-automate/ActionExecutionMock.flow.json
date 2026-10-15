@@ -1,0 +1,22 @@
+{
+  "artifactStatus": "PROPOSED_NOT_IMPORTED",
+  "name": "DN - Approved action mock execution",
+  "enabled": false,
+  "trigger": {
+    "type": "PowerAppsV2",
+    "inputs": ["ActionId", "PayloadHash", "IdempotencyKey", "ActorId"]
+  },
+  "connectionReferences": {"sharepoint": "${SP_CONNECTION_REFERENCE}"},
+  "steps": [
+    {"name": "GetAction", "action": "SharePoint.GetItem", "list": "DN_Actions", "key": "ActionId", "value": "@triggerBody()?['ActionId']"},
+    {"name": "RequireMockConnector", "action": "Condition", "expression": "@equals(outputs('GetAction')?['TargetConnector'], 'mock')", "ifFalse": ["Terminate Failed CONNECTOR_DISABLED"]},
+    {"name": "RequireApproved", "action": "Condition", "expression": "@equals(outputs('GetAction')?['Status'], 'Approved')", "ifFalse": ["Terminate Failed NOT_APPROVED"]},
+    {"name": "RequireExactHash", "action": "Condition", "expression": "@and(equals(triggerBody()?['PayloadHash'], outputs('GetAction')?['PayloadHash']), equals(sha256Canonical(outputs('GetAction')?['PayloadJson']), outputs('GetAction')?['PayloadHash']))", "ifFalse": ["Terminate Failed PAYLOAD_HASH_MISMATCH"]},
+    {"name": "CheckIdempotency", "action": "SharePoint.GetItems", "list": "DN_Actions", "filter": "IdempotencyKey eq '@{triggerBody()?['IdempotencyKey']}'"},
+    {"name": "ReplayOrConflict", "action": "Condition", "expression": "@greater(length(outputs('CheckIdempotency')), 0)", "ifTrue": ["If same ActionId and PayloadHash return stored ResultJson; otherwise Terminate Failed IDEMPOTENCY_CONFLICT"]},
+    {"name": "WriteMockResult", "action": "SharePoint.UpdateItem", "list": "DN_Actions", "values": {"Status": "Mocked", "IdempotencyKey": "@triggerBody()?['IdempotencyKey']", "ResultJson": "{\"execution\":\"mocked\",\"side_effect\":false}"}},
+    {"name": "AppendAudit", "action": "SharePoint.CreateItem", "list": "DN_Audit", "eventType": "mock_executed"},
+    {"name": "Respond", "action": "PowerApps.Respond", "body": {"execution": "mocked", "side_effect": false}}
+  ],
+  "errorPolicy": "Fail closed; no live connector exists in this MVP."
+}

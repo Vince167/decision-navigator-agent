@@ -1,0 +1,489 @@
+{
+  "$defs": {
+    "ClassificationInput": {
+      "properties": {
+        "impact": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Impact",
+          "type": "string"
+        },
+        "reversibility": {
+          "enum": [
+            "reversible",
+            "partially_reversible",
+            "irreversible"
+          ],
+          "title": "Reversibility",
+          "type": "string"
+        },
+        "data_classification": {
+          "default": "internal",
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "restricted",
+            "special_personal"
+          ],
+          "title": "Data Classification",
+          "type": "string"
+        },
+        "regulated_or_gxp": {
+          "default": false,
+          "title": "Regulated Or Gxp",
+          "type": "boolean"
+        },
+        "safety_critical": {
+          "default": false,
+          "title": "Safety Critical",
+          "type": "boolean"
+        },
+        "legal_or_hr_decision": {
+          "default": false,
+          "title": "Legal Or Hr Decision",
+          "type": "boolean"
+        },
+        "external_side_effects": {
+          "default": false,
+          "title": "External Side Effects",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "impact",
+        "reversibility"
+      ],
+      "title": "ClassificationInput",
+      "type": "object"
+    },
+    "Criterion": {
+      "properties": {
+        "id": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "weight": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Weight",
+          "type": "number"
+        },
+        "scale": {
+          "default": "0-5",
+          "enum": [
+            "qualitative",
+            "0-5",
+            "0-100"
+          ],
+          "title": "Scale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "weight"
+      ],
+      "title": "Criterion",
+      "type": "object"
+    },
+    "CriterionValue": {
+      "properties": {
+        "criterion_id": {
+          "title": "Criterion Id",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Value"
+        },
+        "rationale": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "criterion_id",
+        "value",
+        "rationale"
+      ],
+      "title": "CriterionValue",
+      "type": "object"
+    },
+    "Option": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 4000,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "criterion_values": {
+          "items": {
+            "$ref": "#/$defs/CriterionValue"
+          },
+          "title": "Criterion Values",
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "risks": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Risks",
+          "type": "array"
+        },
+        "assumptions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Assumptions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "title",
+        "description"
+      ],
+      "title": "Option",
+      "type": "object"
+    },
+    "PilotClass": {
+      "enum": [
+        "A",
+        "B",
+        "C"
+      ],
+      "title": "PilotClass",
+      "type": "string"
+    },
+    "State": {
+      "enum": [
+        "Draft",
+        "In Evaluation",
+        "Ready for Decision",
+        "Decided",
+        "In Execution",
+        "Closed",
+        "Blocked"
+      ],
+      "title": "State",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "version": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "language": {
+      "default": "en",
+      "enum": [
+        "en",
+        "de"
+      ],
+      "title": "Language",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "decision_question": {
+      "title": "Decision Question",
+      "type": "string"
+    },
+    "problem_statement": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Problem Statement"
+    },
+    "desired_outcome": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Desired Outcome"
+    },
+    "scope_in": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Scope In",
+      "type": "array"
+    },
+    "scope_out": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Scope Out",
+      "type": "array"
+    },
+    "success_criteria": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Success Criteria",
+      "type": "array"
+    },
+    "target_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Target Date"
+    },
+    "requested_by": {
+      "title": "Requested By",
+      "type": "string"
+    },
+    "decision_owner_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decision Owner Id"
+    },
+    "contributor_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Contributor Ids",
+      "type": "array"
+    },
+    "approver_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Approver Ids",
+      "type": "array"
+    },
+    "stakeholder_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Stakeholder Ids",
+      "type": "array"
+    },
+    "classification_input": {
+      "$ref": "#/$defs/ClassificationInput"
+    },
+    "pilot_classification": {
+      "$ref": "#/$defs/PilotClass"
+    },
+    "state": {
+      "$ref": "#/$defs/State",
+      "default": "Draft"
+    },
+    "blocked_from_state": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/State"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "blocked_reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Blocked Reasons",
+      "type": "array"
+    },
+    "evaluation_criteria": {
+      "items": {
+        "$ref": "#/$defs/Criterion"
+      },
+      "title": "Evaluation Criteria",
+      "type": "array"
+    },
+    "options": {
+      "items": {
+        "$ref": "#/$defs/Option"
+      },
+      "title": "Options",
+      "type": "array"
+    },
+    "recommendation_option_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recommendation Option Id"
+    },
+    "recommendation_rationale": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recommendation Rationale"
+    },
+    "unresolved_questions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unresolved Questions",
+      "type": "array"
+    },
+    "risks_assessed": {
+      "default": false,
+      "title": "Risks Assessed",
+      "type": "boolean"
+    },
+    "selected_option_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Option Id"
+    },
+    "decision_text": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decision Text"
+    },
+    "conditions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Conditions",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    },
+    "decided_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decided At"
+    },
+    "closed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Closed At"
+    }
+  },
+  "required": [
+    "title",
+    "decision_question",
+    "requested_by",
+    "classification_input",
+    "pilot_classification"
+  ],
+  "title": "DecisionRecord",
+  "type": "object"
+}

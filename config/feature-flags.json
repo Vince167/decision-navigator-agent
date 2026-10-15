@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "environment": "local-mock",
+  "capabilities": {
+    "A_intake_and_classification": true,
+    "B_evidence_register": true,
+    "C_option_comparison": true,
+    "D_readiness_and_brief": true,
+    "E_human_decision_exact_payload_approval": true,
+    "F_action_handoff_mock_execution": true,
+    "G_live_meeting_monitoring": false,
+    "H_proactive_reminders_and_stall_detection": false,
+    "I_live_enterprise_connectors": false
+  },
+  "failClosed": true
+}

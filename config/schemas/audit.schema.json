@@ -1,0 +1,90 @@
+{
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "decision_id": {
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "record_type": {
+      "enum": [
+        "decision",
+        "evidence",
+        "action",
+        "approval",
+        "system"
+      ],
+      "title": "Record Type",
+      "type": "string"
+    },
+    "record_id": {
+      "title": "Record Id",
+      "type": "string"
+    },
+    "event_type": {
+      "title": "Event Type",
+      "type": "string"
+    },
+    "actor_id": {
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "actor_roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Actor Roles",
+      "type": "array"
+    },
+    "timestamp": {
+      "format": "date-time",
+      "title": "Timestamp",
+      "type": "string"
+    },
+    "before_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Before Hash"
+    },
+    "after_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "After Hash"
+    },
+    "correlation_id": {
+      "title": "Correlation Id",
+      "type": "string"
+    },
+    "details": {
+      "additionalProperties": true,
+      "title": "Details",
+      "type": "object"
+    }
+  },
+  "required": [
+    "decision_id",
+    "record_type",
+    "record_id",
+    "event_type",
+    "actor_id",
+    "actor_roles"
+  ],
+  "title": "AuditRecord",
+  "type": "object"
+}

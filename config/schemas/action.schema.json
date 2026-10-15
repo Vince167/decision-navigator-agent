@@ -1,0 +1,132 @@
+{
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "decision_id": {
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 300,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "owner_id": {
+      "minLength": 1,
+      "title": "Owner Id",
+      "type": "string"
+    },
+    "due_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Due Date"
+    },
+    "target_connector": {
+      "const": "mock",
+      "default": "mock",
+      "title": "Target Connector",
+      "type": "string"
+    },
+    "operation": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Operation",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    },
+    "payload_hash": {
+      "title": "Payload Hash",
+      "type": "string"
+    },
+    "status": {
+      "default": "Proposed",
+      "enum": [
+        "Proposed",
+        "PendingApproval",
+        "Approved",
+        "Mocked",
+        "Failed",
+        "Cancelled"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "approval_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Approval Id"
+    },
+    "idempotency_key": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Idempotency Key"
+    },
+    "result": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Result"
+    },
+    "created_by": {
+      "title": "Created By",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision_id",
+    "title",
+    "owner_id",
+    "operation",
+    "payload",
+    "payload_hash",
+    "created_by"
+  ],
+  "title": "ActionRecord",
+  "type": "object"
+}

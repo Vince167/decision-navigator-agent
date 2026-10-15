@@ -1,0 +1,61 @@
+FICTIONAL DEMO — no enterprise system was contacted
+Decision: dec_57a17503e03e45da82ee8bf5c5225899
+Final state: Closed
+Decision approval hash: ab87773e048f7924f84ee85d505f95b0d3014b43616d0dd76bfc0e47e963be8f
+Action result: {'execution': 'mocked', 'action_id': 'act_4b8f9ec94c344967904b3134d0739dce', 'operation': 'create_demo_task', 'payload_hash': 'b1cecb2d0909da465b9bda30609cda6adb982695aef2708a3a8324e82ac83429', 'side_effect': False}
+Audit events: 19
+
+--- DECISION BRIEF ---
+
+# Decision Brief: FICTIONAL: Choose the Bluebird demo pilot format
+
+- Decision ID: `dec_57a17503e03e45da82ee8bf5c5225899`
+- State: **Closed**
+- Pilot class: **B**
+- Decision owner: `fictional.owner`
+- Target date: `2026-11-06`
+- Readiness: **Ready (100%)**
+
+## Decision question
+Which fictional pilot format should the Bluebird team use?
+
+## Problem and desired outcome
+The fictional Bluebird team needs a safe format for a two-week demo.
+
+Select a reversible format that demonstrates decision readiness.
+
+## Options compared
+### Local mock-only prototype (`opt_2798866fe2784e3c9a3f9b7cdd4ba400`)
+Use synthetic records and mock execution.
+- learning: 5.0 — Exercises A–F locally
+- control: 5.0 — No enterprise connector
+- Evidence: `ev_fa0a2dfa82b846289d9e54db741c29f0`
+### Defer pilot (`opt_7f73b64f51584997931081f9977a6c13`)
+Wait for enterprise access before any demonstration.
+- learning: 1.0 — No near-term feedback
+- control: 5.0 — No system activity
+- Evidence: `ev_debd9399956f4ec0b9fd6cc1410f2f73`
+
+## Recommendation (advisory, not the decision)
+- Option: `opt_2798866fe2784e3c9a3f9b7cdd4ba400`
+- Rationale: Highest fictional learning while retaining strong controls.
+
+## Evidence register
+- `ev_fa0a2dfa82b846289d9e54db741c29f0` [verified] The fictional local connector has no enterprise side effect. — Fictional Bluebird demo specification, Section 2, https://example.invalid/bluebird#mock
+- `ev_debd9399956f4ec0b9fd6cc1410f2f73` [verified] Deferring provides no two-week pilot feedback. — Fictional Bluebird demo specification, Section 3, https://example.invalid/bluebird#defer
+
+## Readiness gaps
+- None
+
+## Decision record
+- Selected option: `opt_2798866fe2784e3c9a3f9b7cdd4ba400`
+- Decision text: Proceed with the fictional local mock-only prototype.
+
+## Execution actions
+- `act_4b8f9ec94c344967904b3134d0739dce` FICTIONAL: create demo follow-up item — Mocked; owner `fictional.executor`; due `2026-11-07`
+
+## Controls
+- The agent does not decide, approve, or execute.
+- Any approval is bound to the exact canonical payload hash.
+- The local connector records a mock execution only; it has no enterprise side effect.
+
